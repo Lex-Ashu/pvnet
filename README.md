@@ -1,6 +1,6 @@
 # PVNet
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-21-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-20-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![tags badge](https://img.shields.io/github/v/tag/openclimatefix/PVNet?include_prereleases&sort=semver&color=FFAC5F)](https://github.com/openclimatefix/PVNet/tags)
@@ -143,8 +143,6 @@ satellite:
 
 `ocf-data-sampler` is currently set up to use 11 channels from the satellite data (the 12th, HRV, is not used).
 
-⚠️ NB: Our publicly accessible satellite data is currently saved with a blosc2 compressor, which is not supported by the tensorstore backend PVNet relies on now. We are in the process of updating this; for now, the paths above cannot be used with this codebase.
-
 ### Training PVNet
 
 How PVNet is run is determined by the configuration files. The example configs in `PVNet/configs.example` work with **streamed_samples** using `datamodule/streamed_samples.yaml`.
@@ -157,6 +155,8 @@ Update the following before training:
         - `image_size_pixels`: spatial crop matching your NWP resolution and the settings in your datamodule configuration (unless you coarsened, e.g. for ECMWF)
 2. In `configs/trainer/default.yaml`:
     - Set `accelerator: 0` if running on a system without a supported GPU
+    - PVNet currently supports training on a single device only. Ensure:
+        - `devices: 1`
 3. In `configs/datamodule/streamed_samples.yaml`:
     - Point `configuration:` to your local `example_configuration.yaml` (or your custom one)
     - Adjust the train/val/test time ranges to your available data
@@ -222,7 +222,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/markus-kreft"><img src="https://avatars.githubusercontent.com/u/129367085?v=4?s=100" width="100px;" alt="Markus Kreft"/><br /><sub><b>Markus Kreft</b></sub></a><br /><a href="https://github.com/openclimatefix/pvnet/commits?author=markus-kreft" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://jack-kelly.com"><img src="https://avatars.githubusercontent.com/u/460756?v=4?s=100" width="100px;" alt="Jack Kelly"/><br /><sub><b>Jack Kelly</b></sub></a><br /><a href="#ideas-JackKelly" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/zaryab-ali"><img src="https://avatars.githubusercontent.com/u/85732412?v=4?s=100" width="100px;" alt="zaryab-ali"/><br /><sub><b>zaryab-ali</b></sub></a><br /><a href="https://github.com/openclimatefix/pvnet/commits?author=zaryab-ali" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Lex-Ashu"><img src="https://avatars.githubusercontent.com/u/181084934?v=4?s=100" width="100px;" alt="Lex-Ashu"/><br /><sub><b>Lex-Ashu</b></sub></a><br /><a href="https://github.com/openclimatefix/pvnet/commits?author=Lex-Ashu" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

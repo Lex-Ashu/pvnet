@@ -23,6 +23,28 @@ MODEL_CARD_NAME = "README.md"
 
 
 def run_config_utilities(config: DictConfig) -> None:
+    # Device validation for multi-device configs (not supported)
+    trainer_cfg = config.get("trainer", {})
+    gpus = trainer_cfg.get("gpus", None)
+    devices = trainer_cfg.get("devices", None)
+
+    def _num_requested(val):
+        if val is None or val == "auto":
+            return 1
+        if isinstance(val, int):
+            return val
+        if isinstance(val, (list, tuple)):
+            return len(val)
+        return 1
+
+    num_gpus = _num_requested(gpus)
+    num_devices = _num_requested(devices)
+    if num_gpus > 1 or num_devices > 1:
+        raise RuntimeError(
+            f"Multi-device training is not supported. Current requested devices={num_devices}."
+            "Set trainer.devices=1 (or gpus=1)."
+        )
+
     """A couple of optional utilities.
 
     Controlled by main config file:
